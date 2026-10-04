@@ -55,18 +55,18 @@ Confirme o aviso de risco de community nodes e aguarde a instalação. Os nodes 
 
 ### Node de gatilho: ZapZap Trigger
 
-A ZapZap faz o *forward* dos eventos do WhatsApp (webhook da UazAPI) para a URL de webhook da sua instância. O **ZapZap Trigger** expõe essa URL dentro do n8n.
+A ZapZap faz o *forward* dos eventos do WhatsApp (webhook da UazAPI) para a URL de webhook da sua instância. O **ZapZap Trigger** expõe essa URL dentro do n8n e **registra o webhook sozinho**.
 
-**Como apontar o webhook da instância para o trigger:**
+**Como usar (automático, padrão):**
 
-1. Adicione o node **ZapZap Trigger** ao fluxo e **ative o workflow** (a Production URL só funciona com o workflow ativo).
-2. Copie a **Production URL** exibida no node (algo como `https://seu-n8n.com/webhook/zapzap-trigger/webhook`).
-3. Aponte o webhook da instância para essa URL, de uma destas formas:
-   - **Pelo painel:** app.zapzapapi.com → sua instância → Webhook → cole a URL.
-   - **Pela API:** `PUT https://api.zapzapapi.com/api/v1/instances/{id}/webhook` com body `{ "webhook_url": "<Production URL>" }` e headers `x-api-key` / `x-api-secret`.
-   - **Automático:** ligue **"Registrar Webhook Automaticamente"** no node e informe o **Instance ID**. Ao ativar o workflow, o node registra a URL sozinho (e tenta limpá-la ao desativar).
+1. Adicione o node **ZapZap Trigger**, selecione a credencial e informe o **Instance ID**.
+2. **Ative o workflow.** O node aponta o webhook da instância para a sua Production URL automaticamente, e remove ao desativar. Não precisa copiar URL nem mexer no painel.
 
-**Filtro de eventos:** o campo *Events* limita o disparo (messages, connection, messages_update, etc). Vazio = todos. O trigger sempre responde `200` para a ZapZap não desativar o webhook por falhas.
+A URL precisa ser pública HTTPS (proteção anti-SSRF da ZapZap). Em produção o n8n tem domínio HTTPS, então funciona direto. Em ambiente local (http/localhost) o registro é recusado com uma mensagem clara: aponte o webhook pelo painel ou use um túnel HTTPS.
+
+**Configuração manual (opcional):** ligue **"Configurar Webhook Manualmente"** para o node não gerenciar o webhook. Aí copie a **Production URL** do node e aponte você mesmo, pelo painel app.zapzapapi.com ou via `PUT https://api.zapzapapi.com/api/v1/instances/{id}/webhook` com body `{ "webhook_url": "<Production URL>" }` e headers `x-api-key` / `x-api-secret`.
+
+**Filtro de eventos:** o campo *Events* limita o disparo (messages, connection, messages_update, etc). Vazio = eventos principais. A seleção também é enviada no registro automático, então eventos opt-in (como presence) passam a ser assinados. O trigger sempre responde `200` para a ZapZap não desativar o webhook por falhas.
 
 Eventos recebidos trazem `instance_id`, `instance_name`, `metadata` (os dados livres que você gravou na instância), `event` e `data`.
 
@@ -95,7 +95,11 @@ Phone format: country code + area code + number, digits only (`5511999999999`). 
 
 ### Trigger node (ZapZap Trigger)
 
-ZapZap forwards WhatsApp events to your instance's webhook URL. Add the trigger, activate the workflow, copy its **Production URL**, and point the instance webhook to it, via the ZapZap panel, via `PUT /instances/{id}/webhook`, or by enabling **Auto-Register Webhook** (with the Instance ID) so the node configures it on activation.
+ZapZap forwards WhatsApp events to your instance's webhook URL. Add the trigger, pick the credential, enter the **Instance ID**, and **activate the workflow**: the node registers the instance webhook to its Production URL automatically and removes it on deactivation. The URL must be public HTTPS (ZapZap anti-SSRF); production n8n has an HTTPS domain, so it works out of the box, while local http/localhost is rejected with a clear message. Turn on **Set Up Webhook Manually** to point the webhook yourself instead.
+
+### Localization (i18n)
+
+The nodes ship canonical n8n translation files (`dist/nodes/<Node>/translations/<locale>/<node>.json`) for `pt-BR`, `en` and `es`. Important: n8n **2.41.x does not render translations for community (custom) nodes**. The editor builds the i18n lookup key under the hardcoded `n8n-nodes-base.nodes.<type>` namespace (`shortNodeType` only strips the `n8n-nodes-base.` prefix), and credential/header translations are read only from the `n8n-nodes-base` package. So for community packages the lookup key keeps the `n8n-nodes-zapzap.` prefix and never resolves. The files are correct and future-ready: they take effect automatically if/when n8n adds community-node i18n. Until then the visible language is the node's base strings (pt-BR).
 
 ---
 

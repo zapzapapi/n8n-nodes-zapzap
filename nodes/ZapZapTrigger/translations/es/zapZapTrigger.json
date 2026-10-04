@@ -1,0 +1,30 @@
+{
+	"header": {
+		"displayName": "ZapZap Trigger",
+		"description": "Recibe eventos de una instancia ZapZap (mensajes, conexión, etc) vía webhook"
+	},
+	"nodeView": {
+		"instanceId": {
+			"displayName": "ID de la Instancia",
+			"description": "ID de la instancia de WhatsApp cuyo webhook se registrará (el UUID de crear o listar instancias)",
+			"placeholder": "uuid-de-la-instancia"
+		},
+		"events": {
+			"displayName": "Eventos",
+			"description": "Eventos que inician el flujo. Vacío = eventos principales (mensajes, conexión, estado).",
+			"options": {
+				"chats": { "displayName": "Chats", "description": "Creación, actualización o eliminación de conversaciones" },
+				"connection": { "displayName": "Conexión", "description": "Cambio de estado de la conexión" },
+				"contacts": { "displayName": "Contactos", "description": "Creación o actualización de contactos" },
+				"groups": { "displayName": "Grupos", "description": "Cambios en grupos y participantes" },
+				"messages": { "displayName": "Mensajes", "description": "Mensajes recibidos y enviados" },
+				"messages_update": { "displayName": "Estado del Mensaje", "description": "Estado de entrega (enviado, entregado, leído)" },
+				"presence": { "displayName": "Presencia", "description": "En línea, desconectado y \"escribiendo\". Volumen alto." }
+			}
+		},
+		"manualSetup": {
+			"displayName": "Configurar Webhook Manualmente",
+			"description": "Por defecto el webhook se registra y se elimina automáticamente. Actívalo solo si prefieres apuntar el webhook por tu cuenta, en el panel o por la API."
+		}
+	}
+}

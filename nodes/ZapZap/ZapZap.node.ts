@@ -8,7 +8,7 @@ export class ZapZap implements INodeType {
 		group: ['output'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: 'Envie mensagens de WhatsApp e gerencie instâncias pela ZapZap API',
+		description: 'Send WhatsApp messages and manage instances through the ZapZap API',
 		defaults: {
 			name: 'ZapZap',
 		},
@@ -52,7 +52,7 @@ export class ZapZap implements INodeType {
 						name: 'Send Text',
 						value: 'sendText',
 						action: 'Send a text message',
-						description: 'Envia uma mensagem de texto simples',
+						description: 'Send a plain text message to a WhatsApp number',
 						routing: {
 							request: {
 								method: 'POST',
@@ -64,7 +64,7 @@ export class ZapZap implements INodeType {
 						name: 'Send Media',
 						value: 'sendMedia',
 						action: 'Send media',
-						description: 'Envia imagem, vídeo, áudio, documento ou figurinha por URL',
+						description: 'Send an image, video, audio, document or sticker from a public URL',
 						routing: {
 							request: {
 								method: 'POST',
@@ -76,7 +76,7 @@ export class ZapZap implements INodeType {
 						name: 'Send Interactive',
 						value: 'sendInteractive',
 						action: 'Send an interactive message',
-						description: 'Envia enquete, botões ou lista de opções',
+						description: 'Send a poll, buttons or an option list',
 						routing: {
 							request: {
 								method: 'POST',
@@ -88,7 +88,7 @@ export class ZapZap implements INodeType {
 						name: 'React',
 						value: 'react',
 						action: 'React to a message',
-						description: 'Reage com um emoji a uma mensagem existente',
+						description: 'React with an emoji to an existing message',
 						routing: {
 							request: {
 								method: 'POST',
@@ -112,7 +112,7 @@ export class ZapZap implements INodeType {
 						name: 'Create',
 						value: 'create',
 						action: 'Create an instance',
-						description: 'Cria uma nova instância WhatsApp (debita do saldo)',
+						description: 'Create a new WhatsApp instance (charged from your balance)',
 						routing: {
 							request: {
 								method: 'POST',
@@ -124,7 +124,7 @@ export class ZapZap implements INodeType {
 						name: 'Get Status',
 						value: 'getStatus',
 						action: 'Get connection status',
-						description: 'Retorna o status da conexão WhatsApp da instância',
+						description: 'Get the WhatsApp connection status of the instance',
 						routing: {
 							request: {
 								method: 'GET',
@@ -136,7 +136,7 @@ export class ZapZap implements INodeType {
 						name: 'Get QR Code',
 						value: 'getQrCode',
 						action: 'Get QR code',
-						description: 'Retorna o QR Code para conectar o WhatsApp à instância',
+						description: 'Get the QR code to connect WhatsApp to the instance',
 						routing: {
 							request: {
 								method: 'GET',
@@ -148,7 +148,7 @@ export class ZapZap implements INodeType {
 						name: 'List',
 						value: 'list',
 						action: 'List instances',
-						description: 'Lista todas as instâncias da conta',
+						description: 'List every instance in your account',
 						routing: {
 							request: {
 								method: 'GET',
@@ -167,8 +167,9 @@ export class ZapZap implements INodeType {
 				type: 'string',
 				required: true,
 				default: '',
-				placeholder: 'uuid-da-instancia',
-				description: 'ID da instância WhatsApp (o UUID retornado ao criar/listar instâncias)',
+				placeholder: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+				description:
+					'WhatsApp instance identifier (the UUID returned when you create or list instances). Find it in your instances list or in the panel at app.zapzapapi.com.',
 				displayOptions: {
 					show: {
 						resource: ['message'],
@@ -181,8 +182,9 @@ export class ZapZap implements INodeType {
 				type: 'string',
 				required: true,
 				default: '',
-				placeholder: 'uuid-da-instancia',
-				description: 'ID da instância WhatsApp (o UUID retornado ao criar/listar instâncias)',
+				placeholder: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+				description:
+					'WhatsApp instance identifier (the UUID returned when you create or list instances). Find it in your instances list or in the panel at app.zapzapapi.com.',
 				displayOptions: {
 					show: {
 						resource: ['instance'],
@@ -200,7 +202,7 @@ export class ZapZap implements INodeType {
 				default: '',
 				placeholder: '5511999999999',
 				description:
-					'Número do destinatário no formato internacional: DDI + DDD + número, só dígitos (ex: 5511999999999). Para grupos use o ID do grupo (@g.us).',
+					'Recipient number in international format: country code + area code + number, digits only (e.g. 5511999999999). For groups, use the group ID (ending in @g.us).',
 				displayOptions: {
 					show: {
 						resource: ['message'],
@@ -218,8 +220,8 @@ export class ZapZap implements INodeType {
 				typeOptions: { rows: 3 },
 				required: true,
 				default: '',
-				placeholder: 'Olá! Tudo bem?',
-				description: 'Conteúdo da mensagem de texto',
+				placeholder: 'Hi! How are you?',
+				description: 'Content of the text message',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendText'] },
 				},
@@ -229,7 +231,7 @@ export class ZapZap implements INodeType {
 				displayName: 'Options',
 				name: 'textOptions',
 				type: 'collection',
-				placeholder: 'Adicionar opção',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendText'] },
@@ -242,15 +244,15 @@ export class ZapZap implements INodeType {
 						default: '',
 						placeholder: 'all',
 						description:
-							'Só em grupo. "all" marca todos (menção oculta que fura o silêncio), ou lista de números separados por vírgula.',
+							'Groups only. Use "all" to mention every member (hidden mention that still notifies everyone), or a comma-separated list of numbers.',
 						routing: { send: { type: 'body', property: 'mentions' } },
 					},
 					{
-						displayName: 'Reply To Message ID',
+						displayName: 'Reply to Message ID',
 						name: 'replyid',
 						type: 'string',
 						default: '',
-						description: 'ID da mensagem a ser respondida (citação)',
+						description: 'ID of the message to reply to (quote)',
 						routing: { send: { type: 'body', property: 'replyid' } },
 					},
 					{
@@ -258,7 +260,7 @@ export class ZapZap implements INodeType {
 						name: 'delay',
 						type: 'number',
 						default: 0,
-						description: 'Atraso antes de enviar, em milissegundos (exibe "digitando...")',
+						description: 'Delay before sending, in milliseconds (shows the "typing..." indicator)',
 						routing: { send: { type: 'body', property: 'delay' } },
 					},
 				],
@@ -270,18 +272,19 @@ export class ZapZap implements INodeType {
 				name: 'type',
 				type: 'options',
 				default: 'image',
-				description: 'Tipo de mídia a enviar',
+				description: 'Type of media to send',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendMedia'] },
 				},
 				options: [
-					{ name: 'Audio (File)', value: 'audio', description: 'Áudio como arquivo (MP3, OGG, WAV)' },
-					{ name: 'Document', value: 'document', description: 'Documento (PDF, DOCX, XLSX…). Use Doc Name.' },
-					{ name: 'Image', value: 'image', description: 'Imagem (JPG, PNG, GIF, WebP)' },
-					{ name: 'Sticker', value: 'sticker', description: 'Figurinha (WebP)' },
-					{ name: 'Video', value: 'video', description: 'Vídeo (MP4, AVI, MOV)' },
-					{ name: 'Video Note (PTV)', value: 'ptv', description: 'Recado de vídeo (nota redonda). Ignora legenda.' },
-					{ name: 'Voice (PTT)', value: 'ptt', description: 'Áudio de voz / push-to-talk (bolha de microfone)' },
+					{ name: 'Audio (File)', value: 'audio', description: 'Audio as a file (MP3, OGG, WAV)' },
+					{ name: 'Document', value: 'document', description: 'Document (PDF, DOCX, XLSX and similar). Set Document Name.' },
+					{ name: 'Image', value: 'image', description: 'Image (JPG, PNG, GIF, WebP)' },
+					{ name: 'Native Audio (Myaudio)', value: 'myaudio', description: 'WhatsApp native audio (OGG/Opus), similar to a voice note' },
+					{ name: 'Sticker', value: 'sticker', description: 'Sticker (WebP)' },
+					{ name: 'Video', value: 'video', description: 'Video (MP4, AVI, MOV)' },
+					{ name: 'Video Note (PTV)', value: 'ptv', description: 'Round video note. Always circular and ignores the caption.' },
+					{ name: 'Voice (PTT)', value: 'ptt', description: 'Voice note / push-to-talk (microphone bubble)' },
 				],
 				routing: { send: { type: 'body', property: 'type' } },
 			},
@@ -291,9 +294,9 @@ export class ZapZap implements INodeType {
 				type: 'string',
 				required: true,
 				default: '',
-				placeholder: 'https://exemplo.com/arquivo.jpg',
+				placeholder: 'https://example.com/file.jpg',
 				description:
-					'URL pública do arquivo. Limite por URL: imagem/vídeo/áudio ~190 MB, documento ~500 MB.',
+					'Public URL of the file. Size limit per URL: around 190 MB for image, video and audio, and around 500 MB for documents.',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendMedia'] },
 				},
@@ -303,7 +306,7 @@ export class ZapZap implements INodeType {
 				displayName: 'Options',
 				name: 'mediaOptions',
 				type: 'collection',
-				placeholder: 'Adicionar opção',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendMedia'] },
@@ -315,7 +318,7 @@ export class ZapZap implements INodeType {
 						type: 'string',
 						typeOptions: { rows: 2 },
 						default: '',
-						description: 'Legenda (apenas imagem e vídeo). Ignorada em ptv.',
+						description: 'Caption (image and video only). Ignored for video notes (ptv).',
 						routing: { send: { type: 'body', property: 'text' } },
 					},
 					{
@@ -323,8 +326,8 @@ export class ZapZap implements INodeType {
 						name: 'docName',
 						type: 'string',
 						default: '',
-						placeholder: 'arquivo.pdf',
-						description: 'Nome exibido no chat. Obrigatório para type=document.',
+						placeholder: 'file.pdf',
+						description: 'File name shown in the chat. Required when Media Type is Document.',
 						routing: { send: { type: 'body', property: 'docName' } },
 					},
 					{
@@ -333,7 +336,7 @@ export class ZapZap implements INodeType {
 						type: 'string',
 						default: '',
 						placeholder: 'all',
-						description: 'Só em grupo. "all" ou lista de números separados por vírgula.',
+						description: 'Groups only. Use "all" or a comma-separated list of numbers.',
 						routing: { send: { type: 'body', property: 'mentions' } },
 					},
 					{
@@ -341,7 +344,7 @@ export class ZapZap implements INodeType {
 						name: 'delay',
 						type: 'number',
 						default: 0,
-						description: 'Atraso antes de enviar, em milissegundos',
+						description: 'Delay before sending, in milliseconds',
 						routing: { send: { type: 'body', property: 'delay' } },
 					},
 				],
@@ -353,14 +356,14 @@ export class ZapZap implements INodeType {
 				name: 'interactiveType',
 				type: 'options',
 				default: 'poll',
-				description: 'Tipo de mensagem interativa',
+				description: 'Type of interactive message',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'] },
 				},
 				options: [
-					{ name: 'Poll', value: 'poll', description: 'Enquete nativa do WhatsApp (/send/poll)' },
-					{ name: 'Buttons', value: 'buttons', description: 'Até 3 botões clicáveis (/send/buttons)' },
-					{ name: 'List', value: 'list', description: 'Menu em lista com seções e itens (/send/list)' },
+					{ name: 'Poll', value: 'poll', description: 'Native WhatsApp poll (/send/poll)' },
+					{ name: 'Buttons', value: 'buttons', description: 'Up to 3 clickable buttons (/send/buttons)' },
+					{ name: 'List', value: 'list', description: 'Menu list with sections and items (/send/list)' },
 				],
 			},
 			{
@@ -370,8 +373,8 @@ export class ZapZap implements INodeType {
 				typeOptions: { rows: 2 },
 				required: true,
 				default: '',
-				placeholder: 'Escolha uma opção:',
-				description: 'Texto principal (pergunta da enquete, corpo dos botões ou da lista)',
+				placeholder: 'Choose an option:',
+				description: 'Main text (the poll question, or the body of the buttons or list)',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'] },
 				},
@@ -383,8 +386,8 @@ export class ZapZap implements INodeType {
 				name: 'pollChoices',
 				type: 'json',
 				required: true,
-				default: '["Opção 1", "Opção 2"]',
-				description: 'Array de strings com as opções de voto',
+				default: '["Option 1", "Option 2"]',
+				description: 'Array of strings with the poll options',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'], interactiveType: ['poll'] },
 				},
@@ -395,7 +398,7 @@ export class ZapZap implements INodeType {
 				name: 'selectableCount',
 				type: 'number',
 				default: 1,
-				description: 'Quantos votos cada pessoa pode marcar (>1 = múltipla escolha, 0 = ilimitado)',
+				description: 'How many options each person can pick (greater than 1 means multiple choice, 0 means unlimited)',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'], interactiveType: ['poll'] },
 				},
@@ -408,8 +411,9 @@ export class ZapZap implements INodeType {
 				type: 'json',
 				required: true,
 				default:
-					'[{"text":"Sim","id":"yes"},{"text":"Nosso site","url":"https://exemplo.com"}]',
-				description: 'Até 3 botões. text+ID = resposta rápida; text+URL = abre link; text+phone = ligar; text+copy = copiar código.',
+					'[{"text":"Yes","id":"yes"},{"text":"Our site","url":"https://example.com"}]',
+				description:
+					'Up to 3 buttons. Use text + ID for a quick reply, text + URL to open a link, text + phone to call, or text + copy to copy a code.',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'], interactiveType: ['buttons'] },
 				},
@@ -419,7 +423,7 @@ export class ZapZap implements INodeType {
 				displayName: 'Options',
 				name: 'buttonsOptions',
 				type: 'collection',
-				placeholder: 'Adicionar opção',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'], interactiveType: ['buttons'] },
@@ -430,8 +434,8 @@ export class ZapZap implements INodeType {
 						name: 'image',
 						type: 'string',
 						default: '',
-						placeholder: 'https://exemplo.com/banner.jpg',
-						description: 'Imagem exibida no topo dos botões',
+						placeholder: 'https://example.com/banner.jpg',
+						description: 'Image shown above the buttons',
 						routing: { send: { type: 'body', property: 'image' } },
 					},
 					{
@@ -439,7 +443,7 @@ export class ZapZap implements INodeType {
 						name: 'footer',
 						type: 'string',
 						default: '',
-						description: 'Texto do rodapé',
+						description: 'Footer text',
 						routing: { send: { type: 'body', property: 'footer' } },
 					},
 				],
@@ -450,8 +454,8 @@ export class ZapZap implements INodeType {
 				name: 'listChoices',
 				type: 'json',
 				required: true,
-				default: '["[Produtos]", "Camiseta|p1|R$ 50", "Calça|p2|R$ 120"]',
-				description: 'Use "[Seção]" para cabeçalho e "Item|ID|descrição" para cada item selecionável',
+				default: '["[Products]", "T-shirt|p1|$ 50", "Pants|p2|$ 120"]',
+				description: 'Use "[Section]" for a header and "Label|value|description" for each selectable item',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'], interactiveType: ['list'] },
 				},
@@ -461,7 +465,7 @@ export class ZapZap implements INodeType {
 				displayName: 'Options',
 				name: 'listOptions',
 				type: 'collection',
-				placeholder: 'Adicionar opção',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					show: { resource: ['message'], operation: ['sendInteractive'], interactiveType: ['list'] },
@@ -472,8 +476,8 @@ export class ZapZap implements INodeType {
 						name: 'listButton',
 						type: 'string',
 						default: '',
-						placeholder: 'Ver opções',
-						description: 'Texto do botão que abre a lista',
+						placeholder: 'View options',
+						description: 'Text of the button that opens the list',
 						routing: { send: { type: 'body', property: 'listButton' } },
 					},
 					{
@@ -481,7 +485,7 @@ export class ZapZap implements INodeType {
 						name: 'footerText',
 						type: 'string',
 						default: '',
-						description: 'Texto do rodapé',
+						description: 'Small text shown below the list',
 						routing: { send: { type: 'body', property: 'footerText' } },
 					},
 				],
@@ -496,7 +500,7 @@ export class ZapZap implements INodeType {
 				default: '',
 				placeholder: '5511991515364:2A6E2F02CE4125FDBA1B',
 				description:
-					'ID da mensagem no formato OWNER:MSGID (ex: 5511991515364:2A6E2F02CE4125FDBA1B). Não use o formato Baileys concatenado com JID.',
+					'Message ID in the OWNER:MSGID format (e.g. 5511991515364:2A6E2F02CE4125FDBA1B). Do not use the Baileys format concatenated with the JID.',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['react'] },
 				},
@@ -509,7 +513,7 @@ export class ZapZap implements INodeType {
 				required: true,
 				default: '',
 				placeholder: '👍',
-				description: 'Emoji da reação. Deixe vazio para remover a reação.',
+				description: 'Reaction emoji. Leave empty to remove the reaction.',
 				displayOptions: {
 					show: { resource: ['message'], operation: ['react'] },
 				},
@@ -523,8 +527,8 @@ export class ZapZap implements INodeType {
 				type: 'string',
 				required: true,
 				default: '',
-				placeholder: 'minha-instancia',
-				description: 'Nome da instância. Apenas letras, números, _ e -.',
+				placeholder: 'my-instance',
+				description: 'Instance name. Letters, numbers, _ and - only.',
 				displayOptions: {
 					show: { resource: ['instance'], operation: ['create'] },
 				},
@@ -534,7 +538,7 @@ export class ZapZap implements INodeType {
 				displayName: 'Options',
 				name: 'createOptions',
 				type: 'collection',
-				placeholder: 'Adicionar opção',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					show: { resource: ['instance'], operation: ['create'] },
@@ -545,8 +549,8 @@ export class ZapZap implements INodeType {
 						name: 'systemName',
 						type: 'string',
 						default: '',
-						placeholder: 'Meu App',
-						description: 'Nome do sistema exibido no WhatsApp',
+						placeholder: 'My App',
+						description: 'System name shown on WhatsApp',
 						routing: { send: { type: 'body', property: 'systemName' } },
 					},
 					{
@@ -555,7 +559,7 @@ export class ZapZap implements INodeType {
 						type: 'json',
 						default: '{}',
 						description:
-							'Dados livres para vincular ao seu sistema (ex: {"clientId":"123"}). Volta nos webhooks.',
+							'Free-form data to link the instance to your system (e.g. {"clientId":"123"}). It is returned on webhook events.',
 						routing: { send: { type: 'body', property: 'metadata', value: '={{ JSON.parse($value) }}' } },
 					},
 				],

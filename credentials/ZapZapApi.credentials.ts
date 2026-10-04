@@ -20,7 +20,7 @@ export class ZapZapApi implements ICredentialType {
 			typeOptions: { password: true },
 			default: '',
 			required: true,
-			description: 'Chave da API (header x-api-key). Pegue no painel em app.zapzapapi.com > Configurações.',
+			description: 'API key (x-api-key header). Get it in the panel at app.zapzapapi.com > Settings.',
 		},
 		{
 			displayName: 'API Secret',
@@ -29,18 +29,18 @@ export class ZapZapApi implements ICredentialType {
 			typeOptions: { password: true },
 			default: '',
 			required: true,
-			description: 'Segredo da API (header x-api-secret). Pegue no painel em app.zapzapapi.com > Configurações.',
+			description: 'API secret (x-api-secret header). Get it in the panel at app.zapzapapi.com > Settings.',
 		},
 		{
 			displayName: 'Base URL',
 			name: 'baseUrl',
 			type: 'string',
 			default: 'https://api.zapzapapi.com/api/v1',
-			description: 'URL base da API. Só mude se usar uma instalação self-hosted da ZapZap API.',
+			description: 'API base URL. Change it only if you run a self-hosted install of the ZapZap API.',
 		},
 	];
 
-	// Injeta os headers de autenticação em toda requisição feita com esta credencial.
+	// Injects the authentication headers into every request made with this credential.
 	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
@@ -51,7 +51,7 @@ export class ZapZapApi implements ICredentialType {
 		},
 	};
 
-	// Botão "Test" na UI: valida as credenciais chamando GET /account.
+	// "Test" button in the UI: validates the credentials by calling GET /account.
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: '={{$credentials.baseUrl}}',

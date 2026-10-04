@@ -1,0 +1,80 @@
+{
+	"header": {
+		"displayName": "ZapZap",
+		"description": "Envía mensajes de WhatsApp y gestiona instancias con la ZapZap API"
+	},
+	"nodeView": {
+		"resource": {
+			"displayName": "Recurso",
+			"description": "Lo que quieres gestionar",
+			"options": {
+				"message": { "displayName": "Mensaje" },
+				"instance": { "displayName": "Instancia" }
+			}
+		},
+		"operation": {
+			"displayName": "Operación",
+			"options": {
+				"sendText": { "displayName": "Enviar Texto", "description": "Envía un mensaje de texto simple" },
+				"sendMedia": { "displayName": "Enviar Multimedia", "description": "Envía imagen, video, audio, documento o sticker por URL" },
+				"sendInteractive": { "displayName": "Enviar Interactivo", "description": "Envía una encuesta, botones o una lista de opciones" },
+				"react": { "displayName": "Reaccionar", "description": "Reacciona con un emoji a un mensaje existente" },
+				"create": { "displayName": "Crear", "description": "Crea una nueva instancia de WhatsApp (se cobra de tu saldo)" },
+				"getStatus": { "displayName": "Ver Estado", "description": "Devuelve el estado de conexión de WhatsApp de la instancia" },
+				"getQrCode": { "displayName": "Obtener Código QR", "description": "Devuelve el código QR para vincular WhatsApp a la instancia" },
+				"list": { "displayName": "Listar", "description": "Lista todas las instancias de la cuenta" }
+			}
+		},
+		"instanceId": {
+			"displayName": "ID de la Instancia",
+			"description": "ID de la instancia de WhatsApp (el UUID que se devuelve al crear o listar instancias)",
+			"placeholder": "uuid-de-la-instancia"
+		},
+		"number": {
+			"displayName": "Número",
+			"description": "Número del destinatario en formato internacional: código de país + código de área + número, solo dígitos. Para grupos usa el ID del grupo (@g.us).",
+			"placeholder": "5511999999999"
+		},
+		"text": {
+			"displayName": "Texto",
+			"description": "Contenido del mensaje de texto",
+			"placeholder": "¡Hola! ¿Cómo estás?"
+		},
+		"type": {
+			"displayName": "Tipo de Multimedia",
+			"description": "Tipo de multimedia a enviar"
+		},
+		"file": {
+			"displayName": "URL del Archivo",
+			"description": "URL pública del archivo. Límite por URL: imagen, video y audio alrededor de 190 MB, documento alrededor de 500 MB.",
+			"placeholder": "https://ejemplo.com/archivo.jpg"
+		},
+		"interactiveType": {
+			"displayName": "Tipo de Interactivo",
+			"description": "Tipo de mensaje interactivo"
+		},
+		"interactiveText": {
+			"displayName": "Texto",
+			"description": "Texto principal (la pregunta de la encuesta, o el cuerpo de los botones o la lista)",
+			"placeholder": "Elige una opción:"
+		},
+		"id": {
+			"displayName": "ID del Mensaje",
+			"description": "ID del mensaje en formato OWNER:MSGID. No uses el formato Baileys concatenado con el JID."
+		},
+		"emoji": {
+			"displayName": "Emoji",
+			"description": "Emoji de la reacción. Déjalo vacío para quitar la reacción."
+		},
+		"name": {
+			"displayName": "Nombre",
+			"description": "Nombre de la instancia. Solo letras, números, _ y -.",
+			"placeholder": "mi-instancia"
+		},
+		"textOptions": { "displayName": "Opciones" },
+		"mediaOptions": { "displayName": "Opciones" },
+		"buttonsOptions": { "displayName": "Opciones" },
+		"listOptions": { "displayName": "Opciones" },
+		"createOptions": { "displayName": "Opciones" }
+	}
+}
