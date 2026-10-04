@@ -51,7 +51,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'Send Text',
 						value: 'sendText',
-						action: 'Enviar mensagem de texto',
+						action: 'Send a text message',
 						description: 'Envia uma mensagem de texto simples',
 						routing: {
 							request: {
@@ -63,7 +63,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'Send Media',
 						value: 'sendMedia',
-						action: 'Enviar m dia',
+						action: 'Send media',
 						description: 'Envia imagem, vídeo, áudio, documento ou figurinha por URL',
 						routing: {
 							request: {
@@ -75,7 +75,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'Send Interactive',
 						value: 'sendInteractive',
-						action: 'Enviar mensagem interativa',
+						action: 'Send an interactive message',
 						description: 'Envia enquete, botões ou lista de opções',
 						routing: {
 							request: {
@@ -87,7 +87,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'React',
 						value: 'react',
-						action: 'Reagir a uma mensagem',
+						action: 'React to a message',
 						description: 'Reage com um emoji a uma mensagem existente',
 						routing: {
 							request: {
@@ -111,7 +111,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'Create',
 						value: 'create',
-						action: 'Criar inst ncia',
+						action: 'Create an instance',
 						description: 'Cria uma nova instância WhatsApp (debita do saldo)',
 						routing: {
 							request: {
@@ -123,7 +123,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'Get Status',
 						value: 'getStatus',
-						action: 'Ver status da conex o',
+						action: 'Get connection status',
 						description: 'Retorna o status da conexão WhatsApp da instância',
 						routing: {
 							request: {
@@ -135,7 +135,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'Get QR Code',
 						value: 'getQrCode',
-						action: 'Obter qr code',
+						action: 'Get QR code',
 						description: 'Retorna o QR Code para conectar o WhatsApp à instância',
 						routing: {
 							request: {
@@ -147,7 +147,7 @@ export class ZapZap implements INodeType {
 					{
 						name: 'List',
 						value: 'list',
-						action: 'Listar inst ncias',
+						action: 'List instances',
 						description: 'Lista todas as instâncias da conta',
 						routing: {
 							request: {
