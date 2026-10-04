@@ -112,4 +112,4 @@ As chaves `x-api-key` / `x-api-secret` ficam na credencial do n8n (servidor). Nu
 
 ## Licença
 
-[MIT](LICENSE) © Rodrigo Damazio
+[MIT](LICENSE) © GM Solutions Hub LTDA
