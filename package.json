@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-zapzap",
   "version": "0.1.0",
-  "description": "Nodes n8n para a ZapZap API — envie mensagens de WhatsApp e gerencie instâncias (n8n community node). WhatsApp automation for n8n.",
+  "description": "Nodes n8n para a ZapZap API, envie mensagens de WhatsApp e gerencie instâncias (n8n community node). WhatsApp automation for n8n.",
   "keywords": [
     "n8n-community-node-package",
     "n8n",

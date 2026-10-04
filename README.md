@@ -1,6 +1,6 @@
 # n8n-nodes-zapzap
 
-Community node para integrar o **WhatsApp** ao n8n através da **[ZapZap API](https://zapzapapi.com)** — envie mensagens, mídia, enquetes/botões/listas, reaja a mensagens, gerencie instâncias e receba eventos em tempo real.
+Community node para integrar o **WhatsApp** ao n8n através da **[ZapZap API](https://zapzapapi.com)**, envie mensagens, mídia, enquetes/botões/listas, reaja a mensagens, gerencie instâncias e receba eventos em tempo real.
 
 > _Community node to connect **WhatsApp** to n8n via the **ZapZap API**: send messages, media, interactive menus, reactions, manage instances and receive real-time events._
 
@@ -29,7 +29,7 @@ Confirme o aviso de risco de community nodes e aguarde a instalação. Os nodes 
    - **API Key** → header `x-api-key`
    - **API Secret** → header `x-api-secret`
    - **Base URL** → `https://api.zapzapapi.com/api/v1` (só mude em self-hosted da ZapZap)
-3. Clique em **Test** — o node chama `GET /account` e confirma o acesso mostrando seu saldo.
+3. Clique em **Test**, o node chama `GET /account` e confirma o acesso mostrando seu saldo.
 
 ### Node de ação: ZapZap
 
@@ -51,7 +51,7 @@ Confirme o aviso de risco de community nodes e aguarde a instalação. Os nodes 
 | Get QR Code | `GET /instances/{instanceId}/qrcode` |
 | List | `GET /instances` |
 
-**Formato do número:** DDI + DDD + número, só dígitos — ex. `5511999999999`. Para grupos, use o ID do grupo (`...@g.us`).
+**Formato do número:** DDI + DDD + número, só dígitos, ex. `5511999999999`. Para grupos, use o ID do grupo (`...@g.us`).
 
 ### Node de gatilho: ZapZap Trigger
 
@@ -95,7 +95,7 @@ Phone format: country code + area code + number, digits only (`5511999999999`). 
 
 ### Trigger node (ZapZap Trigger)
 
-ZapZap forwards WhatsApp events to your instance's webhook URL. Add the trigger, activate the workflow, copy its **Production URL**, and point the instance webhook to it — via the ZapZap panel, via `PUT /instances/{id}/webhook`, or by enabling **Auto-Register Webhook** (with the Instance ID) so the node configures it on activation.
+ZapZap forwards WhatsApp events to your instance's webhook URL. Add the trigger, activate the workflow, copy its **Production URL**, and point the instance webhook to it, via the ZapZap panel, via `PUT /instances/{id}/webhook`, or by enabling **Auto-Register Webhook** (with the Instance ID) so the node configures it on activation.
 
 ---
 

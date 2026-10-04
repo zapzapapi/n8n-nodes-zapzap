@@ -37,7 +37,7 @@ export class ZapZapTrigger implements INodeType {
 		],
 		properties: [
 			{
-				displayName: 'Copie a "Production URL" desta aba e aponte o webhook da sua instância para ela — no painel app.zapzapapi.com ou via <code>PUT /instances/{ID}/webhook</code>. Ou ligue "Registrar Webhook Automaticamente" abaixo.',
+				displayName: 'Copie a "Production URL" desta aba e aponte o webhook da sua instância para ela, no painel app.zapzapapi.com ou via <code>PUT /instances/{ID}/webhook</code>. Ou ligue "Registrar Webhook Automaticamente" abaixo.',
 				name: 'notice',
 				type: 'notice',
 				default: '',
