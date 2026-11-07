@@ -41,6 +41,7 @@ Bom saber:
 - **Texto** pode ter emoji e qualquer alfabeto (árabe, hebraico, chinês, japonês, coreano).
 - **Vários itens** de entrada geram vários resultados. Ligue **Continue On Fail** para receber um item de erro nos que falharem e seguir adiante.
 - **Limite de requisições**: resposta 429 é repetida até 3 vezes, esperando o tempo de `Retry-After`. Erros temporários 502/503/504 são repetidos só em consultas.
+- **QR code logo depois de criar a instância**: se o ZapZap responder que o QR ainda está sendo gerado (409), o **Get QR Code** espera e pergunta de novo, até 3 vezes. Se ainda falhar, a instância já existe e já foi cobrada: rode o **Get QR Code** outra vez ou apague a instância. Não rode o **Create** duas vezes.
 - **Sem mensagem duplicada**: um envio nunca é repetido após timeout ou erro do servidor, porque a mensagem pode já ter saído. O nó para com um aviso ("A mensagem pode já ter sido enviada. Confira a conversa antes de enviar de novo") para você decidir. (A API não tem chave de idempotência.)
 - **Redirecionamentos** nunca são seguidos, então suas chaves não vão para outro servidor.
 - Pode ser usado como **ferramenta de agente de IA** no n8n.
@@ -55,7 +56,8 @@ Bom saber:
 A saída traz campos fáceis no topo: `from`, `text`, `type`, `time`, `chatId`, `isGroup`, `fromMe`, `messageId`, `instanceName`, além do conteúdo completo (`data.message...`).
 
 - Toda entrega é assinada (`X-ZapZap-Signature`, HMAC-SHA256 com horário). O nó confere com comparação em tempo constante e recusa entregas falsas ou com mais de 5 minutos. Com **Set Webhook Manually**, cole o segredo em Options; sem ele, quem souber a URL poderia enviar eventos falsos. No modo automático o nó se recusa a ativar se o ZapZap não devolver o segredo.
-- Entregas repetidas (mesmo ID de entrega) são ignoradas. Ligue **Ignore My Own Messages** em respostas automáticas.
+- Entregas repetidas (mesmo ID de entrega) são ignoradas por padrão (**Skip Repeated Deliveries**). O nó lembra dos últimos 500 IDs de entrega de um workflow ativo; essa memória não vale enquanto você testa com "Listen for test event". Quando rodar duas vezes custaria caro (uma cobrança, uma baixa de estoque), deduplique também por `messageId` no seu workflow. Ligue **Ignore My Own Messages** em respostas automáticas.
+- **Reconectar é seguro.** O webhook pertence à instância do ZapZap, não à sessão do QR: se a mesma instância cair e você ler o QR de novo, o trigger continua funcionando, sem desativar e reativar o workflow. Instância nova tem ID novo: escolha-a no trigger e ative de novo. Para saber quando uma sessão cair, adicione **Connection** nos Events.
 - A resposta sai na hora; seu fluxo roda depois.
 - Enquanto usa "Listen for test event", o webhook da instância aponta para a URL de teste e volta ao normal quando você para.
 
@@ -78,6 +80,7 @@ User-Agent: n8n-nodes-zapzap/<versão>
 | Instância não está conectada | Abra a instância no painel e leia o QR code |
 | Número parece inválido | Use o código do país e confira se o número tem WhatsApp |
 | Limite de requisições | Coloque um nó Wait entre os envios |
+| QR code sendo gerado | O nó já tenta de novo; se ainda falhar, rode o Get QR Code outra vez em alguns segundos (não rode o Create de novo) |
 | Webhook precisa de HTTPS | Defina `WEBHOOK_URL` no n8n com seu endereço https público, ou use Set Webhook Manually |
 
 ## Documentação

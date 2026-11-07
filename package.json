@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-zapzap",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "n8n community nodes for the ZapZap API: send WhatsApp messages, media, polls, buttons and lists, react to messages, manage instances and receive real-time events.",
   "keywords": [
     "n8n-community-node-package",

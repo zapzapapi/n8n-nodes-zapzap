@@ -953,7 +953,7 @@ async function runOperation(ctx: IExecuteFunctions, resource: string, operation:
 			case 'getStatus':
 				return zapZapRequest(ctx, { method: 'GET', path: `/${enc(getId())}/instance/status` });
 			case 'getQrCode':
-				return zapZapRequest(ctx, { method: 'GET', path: `/instances/${enc(getId())}/qrcode` });
+				return zapZapRequest(ctx, { method: 'GET', path: `/instances/${enc(getId())}/qrcode`, retryConflict: true });
 		}
 	}
 

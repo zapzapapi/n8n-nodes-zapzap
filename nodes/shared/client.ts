@@ -11,7 +11,7 @@ import { NodeApiError, NodeOperationError, sleep } from 'n8n-workflow';
 // Keep in sync with package.json "version". test/action.test.js fails if they differ.
 
 export const CLIENT_NAME = 'n8n-nodes-zapzap';
-export const CLIENT_VERSION = '0.1.3';
+export const CLIENT_VERSION = '0.1.4';
 export const CLIENT_HEADER = 'X-ZapZap-Client';
 export const CLIENT_ID = `${CLIENT_NAME}/${CLIENT_VERSION}`;
 export const DEFAULT_BASE_URL = 'https://api.zapzapapi.com/api/v1';
@@ -259,6 +259,11 @@ export interface ZapZapRequest {
 	path: string;
 	body?: IDataObject;
 	qs?: IDataObject;
+	/**
+	 * Only for reads that can answer 409 while the work is still running (the QR code is being generated):
+	 * wait and ask again instead of failing. Same attempts and backoff as the other retries.
+	 */
+	retryConflict?: boolean;
 }
 
 function isTimeout(e: unknown): boolean {
@@ -385,7 +390,8 @@ export async function zapZapRequest<T = unknown>(ctx: Ctx, req: ZapZapRequest): 
 
 		const retryable429 = status === 429;
 		const retryable5xx = idempotent && (status === 502 || status === 503 || status === 504);
-		if ((retryable429 || retryable5xx) && attempt < runtime.maxRetries) {
+		const retryable409 = idempotent && req.retryConflict === true && status === 409;
+		if ((retryable429 || retryable5xx || retryable409) && attempt < runtime.maxRetries) {
 			attempt++;
 			const ra = parseRetryAfter(res.headers?.['retry-after']);
 			const wait = Math.min(ra ?? backoff(attempt), runtime.maxWaitMs);

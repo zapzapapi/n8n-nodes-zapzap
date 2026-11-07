@@ -116,6 +116,34 @@ test('instance: create uppercases name, list strips api_key, QR becomes binary',
 	} finally { await srv.close(); }
 });
 
+test('QR code: 409 "generation in progress" is retried, then gives up; other 409s are not retried', async () => {
+	const sleeps = fastRetries();
+	const png = Buffer.from('PNGDATA').toString('base64');
+	let n = 0;
+	const srv = await startServer((hit) => {
+		if (hit.url.endsWith('/qrcode')) {
+			return ++n <= 2
+				? { status: 409, body: { error: 'CONFLICT', message: 'QR generation in progress' } }
+				: { body: { instance: { qrcode: `data:image/png;base64,${png}` } } };
+		}
+		return { status: 409, body: { error: 'CONFLICT' } };
+	});
+	try {
+		const qr = await run(makeContext({ baseUrl: srv.url, params: { resource: 'instance', operation: 'getQrCode', instanceId: 'a' } }));
+		assert.equal(qr[0][0].binary.qrcode.mimeType, 'image/png');
+		assert.equal(srv.hits.length, 3);
+		assert.equal(sleeps.length, 2);
+		sleeps.length = 0; n = -100; srv.hits.length = 0;
+		await assert.rejects(run(makeContext({ baseUrl: srv.url, params: { resource: 'instance', operation: 'getQrCode', instanceId: 'a' } })));
+		assert.equal(sleeps.length, client.runtime.maxRetries);
+		// a 409 on any other call is a real conflict: no retry
+		sleeps.length = 0; srv.hits.length = 0;
+		await assert.rejects(run(makeContext({ baseUrl: srv.url, params: { resource: 'instance', operation: 'get', instanceId: 'a' } })));
+		assert.equal(srv.hits.length, 1);
+		assert.equal(sleeps.length, 0);
+	} finally { await srv.close(); }
+});
+
 test('429: retries honoring Retry-After, then gives up with a clear message', async () => {
 	const sleeps = fastRetries();
 	let n = 0;

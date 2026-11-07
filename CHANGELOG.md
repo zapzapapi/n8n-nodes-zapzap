@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 (not yet published)
+
+- Get QR Code: when ZapZap answers 409 because the QR code is still being generated, the node waits and asks again (up to 3 times, same backoff as the other retries) instead of failing at once. A 409 on any other call is still a real conflict and is not retried. Test added.
+- READMEs (English, Portuguese, Spanish): what happens on reconnect (the trigger keeps working, new instance needs a new pick), how repeated deliveries are skipped and when to also deduplicate on `messageId`, and what to do when Get QR Code fails after Create Instance (the instance already exists and was charged: run Get QR Code again or delete it, do not run Create twice).
+
 ## 0.1.3 (not yet published)
 
 - Security: the trigger now rejects (401) a delivery when a secret is set but the raw body is missing; network errors no longer pass the raw library error (which can carry the API headers) to n8n; automatic webhook setup fails closed and undoes the registration when ZapZap does not return a webhook secret; manual setup explains that no secret means fake events are accepted.

@@ -43,6 +43,7 @@ Good to know:
 - **Text** can have emoji and any script, including Arabic, Hebrew and CJK.
 - **Several items** in, several results out. Turn on **Continue On Fail** to get an error item for the ones that fail and keep going.
 - **Rate limits**: a 429 answer is retried up to 3 times, waiting as long as `Retry-After` says. Temporary 502/503/504 errors are retried for read calls only.
+- **QR code right after creating an instance**: if ZapZap answers that the QR code is still being generated (409), **Get QR Code** waits and asks again, up to 3 times. If it still fails, the instance already exists and was charged: run **Get QR Code** again or delete the instance. Do not run **Create** twice.
 - **No duplicate messages**: a send is never repeated after a timeout or a server error, because the message may already have gone out. The node then stops with a warning ("The message may have been sent already. Check the chat before sending again") so you can decide. (The API has no idempotency key.)
 - **Redirects** are never followed, so your keys cannot be sent to another host.
 - Usable as an **AI agent tool** in n8n.
@@ -57,7 +58,8 @@ Good to know:
 The output has easy fields at the top: `from`, `text`, `type`, `time`, `chatId`, `isGroup`, `fromMe`, `messageId`, `instanceName`, plus the full payload (`data.message...`).
 
 - Every delivery is signed (`X-ZapZap-Signature`, HMAC-SHA256 with timestamp). The node checks it with a constant-time comparison and rejects forged or older than 5 minutes deliveries. With **Set Webhook Manually** paste the secret in Options, otherwise anyone who knows the URL could send fake events. With automatic setup the node refuses to activate if ZapZap does not return the secret.
-- Retried deliveries (same delivery ID) are skipped. Turn on **Ignore My Own Messages** for auto replies.
+- Retried deliveries (same delivery ID) are skipped by default (**Skip Repeated Deliveries**). The node remembers the last 500 delivery IDs of an active workflow; this memory is not kept while you test with "Listen for test event". When a repeated run would be costly (a charge, a stock update), also deduplicate on `messageId` in your workflow. Turn on **Ignore My Own Messages** for auto replies.
+- **Reconnecting is safe.** The webhook belongs to the ZapZap instance, not to the QR session: if the same instance drops and you scan the QR again, the trigger keeps working, with no need to deactivate and reactivate the workflow. A new instance has a new ID: pick it in the trigger and activate again. To be told when a session drops, add **Connection** to the Events.
 - The answer is sent immediately; your workflow runs after it.
 - While you use "Listen for test event" the instance webhook points to the test URL and is restored when you stop.
 
@@ -80,6 +82,7 @@ That is only the name and version of this node. Nothing about your workflows, yo
 | Instance is not connected | Open the instance in the panel and scan the QR code |
 | Number looks invalid | Use the country code; check the number has WhatsApp |
 | Rate limit reached | Add a Wait node between sends |
+| QR code is being generated | The node already retries; if it still fails, run Get QR Code again in a few seconds (do not run Create again) |
 | Webhook needs HTTPS | Set `WEBHOOK_URL` in n8n to your public https address, or use Set Webhook Manually |
 
 ## Documentation

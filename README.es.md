@@ -41,6 +41,7 @@ Conviene saber:
 - **Texto** con emoji y cualquier alfabeto (árabe, hebreo, chino, japonés, coreano).
 - **Varios ítems** de entrada dan varios resultados. Activa **Continue On Fail** para recibir un ítem de error en los que fallen y seguir.
 - **Límite de solicitudes**: una respuesta 429 se reintenta hasta 3 veces esperando lo que indique `Retry-After`. Los errores temporales 502/503/504 se reintentan solo en consultas.
+- **QR justo después de crear la instancia**: si ZapZap responde que el QR aún se está generando (409), **Get QR Code** espera y consulta de nuevo, hasta 3 veces. Si aún falla, la instancia ya existe y ya fue cobrada: ejecuta **Get QR Code** otra vez o elimina la instancia. No ejecutes **Create** dos veces.
 - **Sin mensajes duplicados**: un envío nunca se repite tras un timeout o error del servidor, porque el mensaje puede haber salido ya. El nodo se detiene con un aviso ("Es posible que el mensaje ya se haya enviado. Revisa el chat antes de volver a enviarlo") para que decidas. (La API no tiene clave de idempotencia.)
 - **Redirecciones** nunca se siguen, así tus claves no viajan a otro servidor.
 - Se puede usar como **herramienta de agente de IA** en n8n.
@@ -55,7 +56,8 @@ Conviene saber:
 La salida trae campos fáciles arriba: `from`, `text`, `type`, `time`, `chatId`, `isGroup`, `fromMe`, `messageId`, `instanceName`, además del contenido completo (`data.message...`).
 
 - Cada entrega va firmada (`X-ZapZap-Signature`, HMAC-SHA256 con hora). El nodo la verifica con comparación en tiempo constante y rechaza entregas falsas o de más de 5 minutos. Con **Set Webhook Manually** pega el secreto en Options; sin él, quien conozca la URL podría enviar eventos falsos. En modo automático el nodo se niega a activarse si ZapZap no devuelve el secreto.
-- Las entregas repetidas (mismo ID de entrega) se ignoran. Activa **Ignore My Own Messages** en respuestas automáticas.
+- Las entregas repetidas (mismo ID de entrega) se ignoran por defecto (**Skip Repeated Deliveries**). El nodo recuerda los últimos 500 IDs de entrega de un flujo activo; esa memoria no vale mientras pruebas con "Listen for test event". Cuando ejecutar dos veces sería costoso (un cobro, una baja de stock), deduplica también por `messageId` en tu flujo. Activa **Ignore My Own Messages** en respuestas automáticas.
+- **Reconectar es seguro.** El webhook pertenece a la instancia de ZapZap, no a la sesión del QR: si la misma instancia se cae y escaneas el QR otra vez, el trigger sigue funcionando, sin desactivar y reactivar el flujo. Una instancia nueva tiene un ID nuevo: elígela en el trigger y activa de nuevo. Para saber cuándo cae una sesión, agrega **Connection** en Events.
 - La respuesta sale de inmediato; tu flujo corre después.
 - Mientras usas "Listen for test event", el webhook de la instancia apunta a la URL de prueba y se restaura al parar.
 
@@ -78,6 +80,7 @@ Es solo el nombre y la versión de este nodo. No se envía nada de tus flujos, d
 | La instancia no está conectada | Abre la instancia en el panel y escanea el QR |
 | El número parece inválido | Usa el código de país y revisa que tenga WhatsApp |
 | Límite de solicitudes | Pon un nodo Wait entre envíos |
+| El QR se está generando | El nodo ya reintenta; si aún falla, ejecuta Get QR Code otra vez en unos segundos (no ejecutes Create de nuevo) |
 | El webhook necesita HTTPS | Define `WEBHOOK_URL` en n8n con tu dirección https pública, o usa Set Webhook Manually |
 
 ## Documentación
